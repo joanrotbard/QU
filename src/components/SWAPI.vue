@@ -1,6 +1,6 @@
 <template>
   <div class="products">
-    <h3>SWAPI <i v-on:click="playSound" class="fa fa-volume-up clickeable"></i></h3>
+    <h3>Swapi <i v-on:click="playSound" class="fa fa-volume-up clickeable"></i></h3>
 
     <div class="card mt-5">
       <div class="card-header">
@@ -22,7 +22,7 @@
                 <th>Population</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="bdsp">
               <tr v-for="planet in planets.results" v-bind:key="planet.name">
                 <template>
                   <td>{{planet.name}}</td>
@@ -39,8 +39,8 @@
             </tbody>
           </table>
           <div id="paginator">
-                <i v-on:click="getPlanets(planets.previous,'Prev')" class="fa fa-backward clickeable"> Prev </i>
-                Next <i v-on:click="getPlanets(planets.next,'Next')" class="fa fa-forward clickeable"></i>
+                <i v-on:click="getPlanets(planets.previous,'Prev')" class="fa fa-backward clickeable"><span> Prev</span> </i>
+                <span> Next</span> <i v-on:click="getPlanets(planets.next,'Next')" class="fa fa-forward clickeable"></i>
                 Showing page {{currentPage}}/{{totalPages}} on a total of {{planets.count}} records
             </div>
         </div>
