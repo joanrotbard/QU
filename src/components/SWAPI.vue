@@ -4,7 +4,7 @@
 
     <div class="card mt-5">
       <div class="card-header">
-        Planets
+        <b>Planets</b>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -39,9 +39,9 @@
             </tbody>
           </table>
           <div id="paginator">
-                <i v-on:click="changePage(planets.previous)" class="fa fa-backward clickeable"></i>
-                <i v-on:click="changePage(planets.next)" class="fa fa-forward clickeable"></i>
-                Showing 10 of {{planets.count}} records
+                <i v-on:click="getPlanets(planets.previous,'Prev')" class="fa fa-backward clickeable"> Prev </i>
+                Next <i v-on:click="getPlanets(planets.next,'Next')" class="fa fa-forward clickeable"></i>
+                Showing page {{currentPage}}/{{totalPages}} on a total of {{planets.count}} records
             </div>
         </div>
       </div>
@@ -56,29 +56,37 @@ export default {
   data () {
     return {
       planets: [],
+      currentPage:1,
+      totalPages: 1,
+      rowsPerPage: 10,
+      audio:{}
     }
   },
   created() {
-    this.getPlanets()
+    this.getPlanets(process.env.ROOT_API)
+    this.audio = new Audio(process.env.AUDIO_PATH)
   },
   computed:{
   },
   methods: {
-    getPlanets() {
-      axios
-      .get('https://swapi.dev/api/planets/')
-      .then(planets => (this.planets = planets.data))
-    },
-    changePage(url){
+    getPlanets(url,pagination) {
       if(url){
         axios
         .get(url)
-        .then(planets => (this.planets = planets.data))
+        .then(planets => {
+          this.planets = planets.data
+          this.totalPages = this.planets.count / this.rowsPerPage
+        })
+        if(pagination === 'Next'){
+          this.currentPage ++
+        }
+        else if(pagination === 'Prev'){
+          this.currentPage --
+        }
       }
     },
     playSound(){
-      var audio = new Audio('https://archive.org/download/StarWarsThemeSongByJohnWilliams/Star Wars Theme Song By John Williams.mp3');
-      audio.play();
+      this.audio.paused ? this.audio.play() : this.audio.pause()
     }
   }
 }
